@@ -13,6 +13,7 @@ currentRam=$(free --mega | awk '$1 == "Mem:" \{print $3 "/" $2\}')\
 percentageRam=$(free --mega | awk '$1 == "Mem:" \{printf("%.2f%%"), ($3/$2)*100\}')\
 currentDisk=$(df -BG | grep '^/dev/' | grep -v '/boot$' | awk '\{if ($1 != "") \{v1+=$2; v2+=$3\}\} END \{printf("%d/%d", v2, v1)\}')\
 percentageDisk=$(df -BG | grep '^/dev/' | grep -v '/boot$' | awk '\{v1 += $3\} \{v2 += $2\} END \{printf("%d%%"), (v1/v2)*100\}')\
+allDiskinOne=$(df -BG | grep "^/dev" | grep -v "/boot" | awk '\{if ($1 != "") v1+=$2; v2+=$3\} END \{printf("%d/%d (%d%%)", v2, v1, v2/v1*100)\}')\
 currentCpu=$(mpstat | grep all | awk '\{print(100 - $13"%")\}')\
 lastboot=$(who -b | awk '$1 == "system" \{printf("%s %s"), $3, $4\}')\
 lvm=$(if [ $(lsblk | grep "lvm" | wc -l) -eq 0 ]; then echo no; else echo yes; fi)\
